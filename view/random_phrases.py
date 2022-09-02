@@ -1,6 +1,6 @@
 import random
-import KriptBot.view.weather as weather
-import KriptBot.view.anecdot as anektod
+import view.weather as weather
+import view.anecdot as anektod
 
 
 def hello(name=None):

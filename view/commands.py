@@ -1,5 +1,5 @@
 import re
-from KriptBot.brench_communicate import hello, weather
+from brench_communicate import hello, weather
 
 mery_cmd = {
     r"\bпривет|здра?ств|\bку\b": hello.send_hello,

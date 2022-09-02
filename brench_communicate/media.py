@@ -1,7 +1,7 @@
 import os
 import random
-import KriptBot.view.random_phrases as dialog
-from KriptBot.view.menu import get_default_menu
+import view.random_phrases as dialog
+from view.menu import get_default_menu
 
 
 def send_photo(message, bot):

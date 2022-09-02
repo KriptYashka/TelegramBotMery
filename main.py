@@ -4,7 +4,7 @@ from view.menu import get_default_menu
 from view.commands import mery_cmd
 from view import random_phrases as dialog
 
-from KriptBot.brench_communicate.media import send_photo
+from brench_communicate.media import send_photo
 
 token = "5052598391:AAEBBvip6Th7wgzYNxNHdDlErVdt64zStis"  # Не смейте трогать моего бота! Меняйте токен
 bot = telebot.TeleBot(token, parse_mode=None)
