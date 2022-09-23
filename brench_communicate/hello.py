@@ -1,5 +1,4 @@
 import random
-
 import telebot
 import view.random_phrases as dialog
 from view.menu import get_default_menu, button_menu
