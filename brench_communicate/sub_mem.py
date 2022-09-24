@@ -20,11 +20,11 @@ def subscribe_user(message: telebot.types.Message, bot: telebot.TeleBot):
             bot.send_message(user.id, dialog.error(), reply_markup=get_default_menu())
 
 
-def unsubscribe_user(message: telebot.types.Message, bot: telebot.TeleBot):
-    user = message.from_user
-    if not user_table.is_exist(user.id):
-        bot.send_message(user.id, dialog.error(), reply_markup=get_default_menu())
-    else:
-        try:
-            user_table.delete_user(user.id)
-            bot.send_message(user.id, dialog.unsubscribe(), reply_markup=get_default_menu())
+# def unsubscribe_user(message: telebot.types.Message, bot: telebot.TeleBot):
+#     user = message.from_user
+#     if not user_table.is_exist(user.id):
+#         bot.send_message(user.id, dialog.error(), reply_markup=get_default_menu())
+#     else:
+#         try:
+#             user_table.delete_user(user.id)
+#             bot.send_message(user.id, dialog.unsubscribe(), reply_markup=get_default_menu())

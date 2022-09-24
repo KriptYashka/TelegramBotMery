@@ -8,6 +8,7 @@ from view.menu import get_default_menu
 from view.commands import mery_cmd
 from view.database.db_initial import db_init
 from brench_communicate.media import send_photo
+from voice.test_laptop import VoiceRecognize
 
 os.environ['MERY_TOKEN'] = '5052598391:AAEBBvip6Th7wgzYNxNHdDlErVdt64zStis'
 token = os.environ['MERY_TOKEN']
@@ -45,14 +46,8 @@ def listen_photo_message(message: telebot.types.Message):
 
 @bot.message_handler(content_types=["voice"])
 def listen_voice_message(message: telebot.types.Message):
-    filename = str(uuid.uuid4())
-    file_name_full = "./voice/" + filename + ".ogg"
-    file_name_full_converted = "./voice/" + filename + "_conv.wav"
-    file_info = bot.get_file(message.voice.file_id)
-    downloaded_file = bot.download_file(file_info.file_path)
-    with open(file_name_full, 'wb') as new_file:
-        new_file.write(downloaded_file)
-    os.system("ffmpeg -i " + file_name_full + "  " + file_name_full_converted)
+    vr = VoiceRecognize()
+    vr.recognize(bot, message)
 
 
 def main():
