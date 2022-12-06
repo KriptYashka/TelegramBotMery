@@ -10,7 +10,7 @@ class Triggers(DB):
         super().__init__(db_name)
 
     def init_user_delete(self):
-        request = f"""CREATE TRIGGER user_delete BEFORE DELETE
+        request = f"""CREATE TRIGGER IF NOT EXISTS user_delete BEFORE DELETE
                                     ON { tables.user_table.UserDB.table_name }
                                     BEGIN
                                     DELETE FROM { tables.profile_table.ProfileDB.table_name } WHERE user_id = OLD.tg_id;

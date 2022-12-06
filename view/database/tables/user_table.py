@@ -1,6 +1,7 @@
 import datetime
 import telebot
 from view.database.base import DB
+from view.database.tables.profile_table import ProfileDB
 from view.database.db_setting import *
 
 
@@ -16,7 +17,6 @@ class UserDB(DB):
         """
         request = """CREATE TABLE IF NOT EXISTS {} (
                 id INT PRIMARY KEY,
-                tg_id INT,
                 profile_id INT
                 );""".format(self.table_name)
         self.cursor.execute(request)
@@ -25,9 +25,11 @@ class UserDB(DB):
         obj = self.select(self.table_name, "id", user_id)
         return len(obj)
 
-    def add_user(self, user: telebot.types.User, status="common"):
+    def add_user(self, user: telebot.types.User):
+        # profile_db = ProfileDB()
+        # profile_db.add_profile(user)
         data = [
-            user.id, datetime.datetime.now().isoformat(), status
+            user.id, "1"
         ]
         self.insert(self.table_name, data)
 

@@ -5,7 +5,7 @@ import telebot
 from view.main_modules import random_phrases as dialog
 from view.main_modules.menu import get_default_menu
 from view.main_modules.commands import mery_cmd
-from view.database.db_initial import db_init
+from view.database.db_view import db_init
 from brench_communicate.media import send_photo
 
 os.environ['MERY_TOKEN'] = '5052598391:AAEBBvip6Th7wgzYNxNHdDlErVdt64zStis'

@@ -6,7 +6,7 @@ from view.database.db_setting import *
 
 
 class ProfileDB(DB):
-    table_name = "profile"
+    table_name = "profiles"
 
     def __init__(self):
         super().__init__(db_name)
@@ -18,29 +18,22 @@ class ProfileDB(DB):
         request = """CREATE TABLE IF NOT EXISTS {} (
                 id INT PRIMARY KEY,
                 user_id INT,
-                name TEXT,
-                birthday DATE,
                 datetime_join DATETIME,
-                status TEXT
+                status TEXT,
+                name TEXT,
+                birthday DATE
                 );""".format(self.table_name)
         self.cursor.execute(request)
 
-
-    def is_exist(self, user_id: int):
-        obj = self.select(self.table_name, "id", user_id)
+    def is_exist(self, profile_id: int):
+        obj = self.select(self.table_name, "id", profile_id)
         return len(obj)
 
-    def add_user(self, user: telebot.types.User, status="common"):
+    def add_profile(self, user: telebot.types.User, status="common"):
         data = [
             user.id, datetime.datetime.now().isoformat(), status
         ]
         self.insert(self.table_name, data)
 
-    def delete_user(self, user_id: int):
-        self.delete(self.table_name, "id", user_id)
-        request = """CREATE TRIGGER my_u_log BEFORE INSERT
-                    ON users
-                    BEGIN
-                    INSERT INTO user_log(id_u, u_date) VALUES (NEW.id, datetime('now'));
-                    END;
-                """
+    def delete_profile(self, profile_id: int):
+        self.delete(self.table_name, "id", profile_id)
