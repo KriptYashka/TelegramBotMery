@@ -1,25 +1,30 @@
 import datetime
 import telebot
 from view.database.base import DB
+from view.database.tables.user_table import UserDB
 from view.database.db_setting import *
 
 
-class UserDB(DB):
-    table_name = "users"
+class ProfileDB(DB):
+    table_name = "profile"
 
     def __init__(self):
         super().__init__(db_name)
 
     def init_table(self):
         """
-        Создает таблицу пользователей
+        Создает таблицу профилей пользователей
         """
         request = """CREATE TABLE IF NOT EXISTS {} (
                 id INT PRIMARY KEY,
-                tg_id INT,
-                profile_id INT
+                user_id INT,
+                name TEXT,
+                birthday DATE,
+                datetime_join DATETIME,
+                status TEXT
                 );""".format(self.table_name)
         self.cursor.execute(request)
+
 
     def is_exist(self, user_id: int):
         obj = self.select(self.table_name, "id", user_id)
@@ -33,3 +38,9 @@ class UserDB(DB):
 
     def delete_user(self, user_id: int):
         self.delete(self.table_name, "id", user_id)
+        request = """CREATE TRIGGER my_u_log BEFORE INSERT
+                    ON users
+                    BEGIN
+                    INSERT INTO user_log(id_u, u_date) VALUES (NEW.id, datetime('now'));
+                    END;
+                """

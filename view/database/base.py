@@ -2,32 +2,32 @@ import sqlite3
 from typing import List
 
 
-def get_table_form(params):
-    if params == "":
-        return ""
-    text = "("
-    for item in params:
-        text += item + ","
-    text = text[:-1] + ")"
-    return text
-
-
-def get_insert_format(table, params, table_params):
-    req = "INSERT INTO {} {} VALUES (".format(table, get_table_form(table_params))
-    for item in params:
-        if item == 'null':
-            req += '{},'.format(item)
-        else:
-            req += '"{}",'.format(item)
-    req = req[:-1] + ");"
-    print(req)
-    return req
-
-
 class DB:
     """
     Базовый класс БД
     """
+
+    @staticmethod
+    def get_table_form(params):
+        if params == "":
+            return ""
+        text = "("
+        for item in params:
+            text += item + ","
+        text = text[:-1] + ")"
+        return text
+
+    @staticmethod
+    def get_insert_format(table, params, table_params):
+        req = "INSERT INTO {} {} VALUES (".format(table, DB.get_table_form(table_params))
+        for item in params:
+            if item == 'null':
+                req += '{},'.format(item)
+            else:
+                req += '"{}",'.format(item)
+        req = req[:-1] + ");"
+        print(req)
+        return req
 
     def __init__(self, db_name: str):
         self.conn = sqlite3.connect(db_name)
@@ -55,7 +55,7 @@ class DB:
         col_fields - названия колонок таблицы БД. Если данные вводятся по порядку названия таблицы, этот параметр не
         требуется
         """
-        request_insert = get_insert_format(table, data, col_fields)
+        request_insert = DB.get_insert_format(table, data, col_fields)
         self.execute_and_commit(request_insert)
 
     def select(self, table, search_item_name=None, search_item_value=None):

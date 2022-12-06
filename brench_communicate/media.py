@@ -1,7 +1,7 @@
 import os
 import random
-import view.random_phrases as dialog
-from view.menu import get_default_menu
+import view.main_modules.random_phrases as dialog
+from view.main_modules.menu import get_default_menu
 
 
 def send_photo(message, bot):

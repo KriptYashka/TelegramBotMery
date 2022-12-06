@@ -1,7 +1,7 @@
 import random
 import telebot
-import view.random_phrases as dialog
-from view.menu import get_default_menu, button_menu
+import view.main_modules.random_phrases as dialog
+from view.main_modules.menu import get_default_menu, button_menu
 
 
 def send_hello(message: telebot.types.Message, bot: telebot.TeleBot):
