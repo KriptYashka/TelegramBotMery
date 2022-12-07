@@ -1,7 +1,6 @@
 import datetime
 import telebot
 from view.database.base import DB
-from view.database.tables.user_table import UserDB
 from view.database.db_setting import *
 
 
