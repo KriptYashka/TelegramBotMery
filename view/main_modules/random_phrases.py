@@ -154,3 +154,27 @@ def add_section(sel=0, theme_name=None, datetime=None):
     if sel == 0 and datetime:
         res += f"\nВремя окончания рубрики: {datetime}"
     return res
+
+
+def add_question(sel=0, theme_name=None, datetime=None):
+    """
+    :param sel: Тип диалога:
+    0 - Всё готово
+    1 - Группа вопроса
+    2 - Добавление названия
+    3 - Добавление ответа
+    4 - Добавление короткого ответа
+    """
+    if sel == 0:
+        text = [f"Прекрасно, новая рубрика {theme_name} готова!", f"Новый раздел вопросов {theme_name} готов!"]
+    elif sel == 1:
+        text = ["Какую тему вопросов будем создавать?", "Как назовём новый раздел вопросов?"]
+    elif sel == 2:
+        text = ["Давай поставим сроки данной темы.",
+                "Поставь время окончания данного раздела.\n__(Я его удалять пока не буду)__"]
+    else:
+        text = unknown_command()
+    res = random.choice(text)
+    if sel == 0 and datetime:
+        res += f"\nВремя окончания рубрики: {datetime}"
+    return res
