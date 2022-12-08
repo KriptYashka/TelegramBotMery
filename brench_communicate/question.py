@@ -19,7 +19,7 @@ def branch_add_section(message: telebot.types.Message, bot):
     def ask_add_section(message: telebot.types.Message, bot):
         user_id = message.from_user.id
         text = dialog.add_section(1)
-        bot.send_message(user_id, text, parse_mode="Markdown")
+        bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
         bot.register_next_step_handler(message, ask_date_add_section, bot)
 
     def ask_date_add_section(message: telebot.types.Message, bot):
