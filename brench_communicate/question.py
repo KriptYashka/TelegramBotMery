@@ -75,3 +75,11 @@ def branch_add_section(message: telebot.types.Message, bot):
     # Основной код ветки
 
     ask_add_section(message, bot)
+
+
+def branch_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
+    def ask_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
+        user_id = message.from_user.id
+        text = dialog.add_question(1)
+        bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
+        bot.register_next_step_handler(message, ask_date_add_section, bot)
