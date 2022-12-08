@@ -15,7 +15,7 @@ class ProfileDB(DB):
         Создает таблицу профилей пользователей
         """
         request = """CREATE TABLE IF NOT EXISTS {} (
-                id INT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 user_id INT,
                 datetime_join DATETIME,
                 status TEXT,

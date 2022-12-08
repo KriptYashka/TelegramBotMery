@@ -16,7 +16,7 @@ class UserDB(DB):
         Создает таблицу пользователей
         """
         request = """CREATE TABLE IF NOT EXISTS {} (
-                id INT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 profile_id INT
                 );""".format(self.table_name)
         self.cursor.execute(request)
@@ -25,7 +25,7 @@ class UserDB(DB):
         obj = self.select(self.table_name, "id", user_id)
         return len(obj)
 
-    def add_user(self, user: telebot.types.User):
+    def append(self, user: telebot.types.User):
         # profile_db = ProfileDB()
         # profile_db.add_profile(user)
         data = [
@@ -33,5 +33,5 @@ class UserDB(DB):
         ]
         self.insert(self.table_name, data)
 
-    def delete_user(self, user_id: int):
+    def delete_by_id(self, user_id: int):
         self.delete(self.table_name, "id", user_id)

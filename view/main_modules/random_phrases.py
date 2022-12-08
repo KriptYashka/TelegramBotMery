@@ -126,3 +126,31 @@ def error():
     res = random.choice(text)
     res = "❗️" + res
     return res
+
+
+def perplexity():
+    text = ["Нуу... Тебе видней.", "Ла-а-а-адно, как скажешь"]
+    res = random.choice(text)
+    return res
+
+
+def add_section(sel=0, theme_name=None, datetime=None):
+    """
+    :param sel: Тип диалога:
+    0 - Всё готово
+    1 - Добавление названия
+    2 - Добавление времени
+    """
+    if sel == 0:
+        text = [f"Прекрасно, новая рубрика {theme_name} готова!", f"Новый раздел вопросов {theme_name} готов!"]
+    elif sel == 1:
+        text = ["Какую тему вопросов будем создавать?", "Как назовём новый раздел вопросов?"]
+    elif sel == 2:
+        text = ["Давай поставим сроки данной темы.",
+                "Поставь время окончания данного раздела.\n__(Я его удалять пока не буду)__"]
+    else:
+        text = unknown_command()
+    res = random.choice(text)
+    if sel == 0 and datetime:
+        res += f"\nВремя окончания рубрики: {datetime}"
+    return res

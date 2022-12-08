@@ -16,7 +16,7 @@ class StreamDB(DB):
         Создает таблицу профилей пользователей
         """
         request = """CREATE TABLE IF NOT EXISTS {} (
-                id INT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 title TEXT,
                 description TEXT
                 );""".format(self.table_name)

@@ -15,7 +15,7 @@ class SectionQuestionDB(DB):
         Создает таблицу секций вопросов
         """
         request = """CREATE TABLE IF NOT EXISTS {} (
-                id INT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 title TEXT,
                 datetime_finish DATETIME
                 );""".format(self.table_name)
@@ -24,6 +24,14 @@ class SectionQuestionDB(DB):
     def is_exist(self, profile_id: int):
         obj = self.select(self.table_name, "id", profile_id)
         return len(obj)
+
+    def append(self, title, datetime_finish=None):
+        date = [title]
+        col_fields = ["title"]
+        if datetime_finish:
+            date.append(datetime_finish)
+            col_fields.append("datetime_finish")
+        self.insert(self.table_name, date, col_fields)
 
 
 class QuestionDB(DB):
@@ -37,7 +45,7 @@ class QuestionDB(DB):
         Создает таблицу вопросов
         """
         request = """CREATE TABLE IF NOT EXISTS {} (
-                id INT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 section_id INT,
                 title TEXT,
                 answer TEXT,

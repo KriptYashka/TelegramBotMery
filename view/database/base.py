@@ -1,5 +1,7 @@
 import sqlite3
 from typing import List
+from view.database.db_setting import db_name
+import datetime
 
 
 class DB:
@@ -9,7 +11,7 @@ class DB:
 
     @staticmethod
     def get_table_form(params):
-        if params == "":
+        if not params:
             return ""
         text = "("
         for item in params:
@@ -26,7 +28,6 @@ class DB:
             else:
                 req += '"{}",'.format(item)
         req = req[:-1] + ");"
-        print(req)
         return req
 
     def __init__(self, db_name: str):
@@ -46,7 +47,7 @@ class DB:
         self.cursor.execute(request)
         self.conn.commit()
 
-    def insert(self, table: str, data: List[str], col_fields=""):
+    def insert(self, table: str, data: List[str], col_fields=None):
         """
         Добавляет в нужную таблицу данные ( data )
 
@@ -74,6 +75,7 @@ class DB:
         request = "DELETE FROM {} WHERE {} = {}".format(table, search_item_name, search_item_value)
         self.execute_and_commit(request)
 
+
     def get_id(self, table):
         request = "SELECT * FROM {}".format(table)
         self.cursor.execute(request)
@@ -82,3 +84,11 @@ class DB:
         for item in result:
             arr.append(item[0])
         return arr
+
+
+def main():
+    db = DB(db_name=f"../../{db_name}")
+    db.insert("section_question", ["Test", datetime.datetime.now().isoformat()], ["title", "datetime_finish"])
+
+if __name__ == '__main__':
+    main()

@@ -12,7 +12,7 @@ def subscribe_user(message: telebot.types.Message, bot: telebot.TeleBot):
         bot.send_message(user.id, dialog.subscribe_exist(), reply_markup=get_default_menu())
     else:
         try:
-            db.add_user(user)
+            db.append(user)
             bot.send_message(user.id, dialog.subscribe(), reply_markup=get_default_menu())
         except Exception:
             print("Ошибка при создании пользователя")
