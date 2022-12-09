@@ -33,6 +33,9 @@ class SectionQuestionDB(DB):
             col_fields.append("datetime_finish")
         self.insert(self.table_name, date, col_fields)
 
+    def get_all(self):
+        return self.select(self.table_name)
+
 
 class QuestionDB(DB):
     table_name = "question"
@@ -58,3 +61,8 @@ class QuestionDB(DB):
     def is_exist(self, profile_id: int):
         obj = self.select(self.table_name, "id", profile_id)
         return len(obj)
+
+
+if __name__ == "__main__":
+    objDB = SectionQuestionDB()
+    print(objDB.get_all())

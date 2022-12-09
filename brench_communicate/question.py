@@ -39,7 +39,7 @@ def branch_add_section(message: telebot.types.Message, bot):
         items = datetime_final.split(".")
         if len(items) == 3:
             try:
-                datetime.datetime(int(items[0]), int(items[1]), int(items[2]))
+                datetime.datetime(int(items[2]), int(items[1]), int(items[0]))
                 return True
             except ValueError:
                 return False
@@ -53,7 +53,7 @@ def branch_add_section(message: telebot.types.Message, bot):
 
         text = f"Правильно я тебя понимаю, новая тема для вопросов:\n\n**{theme}**"
         if datetime_finish:
-            text += f"\nСрок: {datetime_finish}"
+            text += f"\nСрок: {datetime_finish.split('T')[0]}"
 
         bot.send_message(user_id, text, reply_markup=button_menu(["Да", "Нет"]), parse_mode="Markdown")
         bot.register_next_step_handler(message, do_add_section, bot, theme, datetime_finish)
@@ -77,9 +77,60 @@ def branch_add_section(message: telebot.types.Message, bot):
     ask_add_section(message, bot)
 
 
+def branch_show_section(message: telebot.types.Message, bot: telebot.TeleBot):
+    def show_all_sections(message: telebot.types.Message, bot: telebot.TeleBot):
+        user_id = message.from_user.id
+        sqDB = question_table.SectionQuestionDB()
+        sections = sqDB.get_all()
+        text = "Текущие секции вопросов:\n--------------------\n"
+        for section in sections:
+            section_id, section_title, section_datetime_final = section[0], section[1], section[2]
+            text += f"{section_id}. {section_title}."
+            if section_datetime_final:
+                separated_text = section_datetime_final.split("T")[0]
+                text += f" `{separated_text}`."
+            text += "\n"
+        bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=get_default_menu())
+
+    # Основной код ветки
+
+    show_all_sections(message, bot)
+
+
 def branch_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
-    def ask_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
+    def ask_section_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
         user_id = message.from_user.id
         text = dialog.add_question(1)
         bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
-        bot.register_next_step_handler(message, ask_date_add_section, bot)
+        bot.register_next_step_handler(message, ask_title_add_question, bot)
+
+    def ask_title_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
+        user_id = message.from_user.id
+        text = dialog.add_question(2)
+
+        if message.text.lower() == "стоп":
+            bot.send_message(user_id, dialog.perplexity(), reply_markup=get_default_menu())
+            return 
+
+        section_id = None
+        if message.text.isdecimal():
+            section_id = int(message.text)
+            sqDB = question_table.SectionQuestionDB()
+            if not sqDB.is_exist(section_id):
+                section_id = None
+        if section_id is None:
+            text = "Такого ID несуществует. Введи другой."
+            bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
+            ask_section_add_question(message, bot)
+        else:
+            bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
+            bot.register_next_step_handler(message, ask_answer_add_question, bot, section_id)
+
+    def ask_answer_add_question(message: telebot.types.Message, bot: telebot.TeleBot, title):
+        # user_id = message.from_user.id
+        # text = dialog.add_question(1)
+        # bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
+        # bot.register_next_step_handler(message, ask_date_add_section, bot)
+        pass
+
+    ask_section_add_question(message, bot)

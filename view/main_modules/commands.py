@@ -7,5 +7,7 @@ mery_cmd = {
     r"завтра погода|завтра температур|сколько завтра градус": weather.send_weather_yesterday,
     r"хочу подписаться": sub_mem.subscribe_user,
     r"добавить раздел вопрос": question.branch_add_section,
+    r"показать раздел": question.branch_show_section,
+    r"добавить вопрос": question.branch_add_question,
     # r"расскажи анекдот|шутку|прикол": hello.send_joke,
 }
