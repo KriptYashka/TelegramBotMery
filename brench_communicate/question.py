@@ -77,6 +77,61 @@ def branch_add_section(message: telebot.types.Message, bot):
     ask_add_section(message, bot)
 
 
+def branch_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
+    def ask_section_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
+        user_id = message.from_user.id
+        text = dialog.add_question(1)
+        bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
+        bot.register_next_step_handler(message, ask_title_add_question, bot)
+
+    def ask_title_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
+        user_id = message.from_user.id
+
+        if message.text.lower() == "стоп":
+            bot.send_message(user_id, dialog.perplexity(), reply_markup=get_default_menu())
+            return
+        context = dict()
+
+        section_id = None
+        if message.text.isdecimal():
+            section_id = int(message.text)
+            section_db = question_table.SectionQuestionDB()
+            if not section_db.is_exist(section_id):
+                section_id = None
+        if section_id is None:
+            text = "Такого ID несуществует. Введи другой."
+            bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
+            ask_section_add_question(message, bot)
+        else:
+            context["section_id"] = section_id
+
+            text = dialog.add_question(2)
+            bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
+            bot.register_next_step_handler(message, ask_answer, bot, context)
+
+    def ask_answer(message: telebot.types.Message, bot: telebot.TeleBot, context: dict):
+        user_id = message.from_user.id
+
+        context["answer"] = message.text.strip()
+
+        text = dialog.add_question(3)
+        bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
+        bot.register_next_step_handler(message, ask_short_answer, bot, context)
+
+    def ask_short_answer(message: telebot.types.Message, bot: telebot.TeleBot, context: dict):
+        user_id = message.from_user.id
+
+        context["short_answer"] = message.text.strip()
+
+        text = dialog.add_question(3)
+        bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
+        bot.register_next_step_handler(message, ask_short_answer, bot, context)
+
+    ask_section_add_question(message, bot)
+
+
+
+
 def branch_show_section(message: telebot.types.Message, bot: telebot.TeleBot):
     def show_all_sections(message: telebot.types.Message, bot: telebot.TeleBot):
         user_id = message.from_user.id
@@ -95,42 +150,3 @@ def branch_show_section(message: telebot.types.Message, bot: telebot.TeleBot):
     # Основной код ветки
 
     show_all_sections(message, bot)
-
-
-def branch_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
-    def ask_section_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
-        user_id = message.from_user.id
-        text = dialog.add_question(1)
-        bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
-        bot.register_next_step_handler(message, ask_title_add_question, bot)
-
-    def ask_title_add_question(message: telebot.types.Message, bot: telebot.TeleBot):
-        user_id = message.from_user.id
-        text = dialog.add_question(2)
-
-        if message.text.lower() == "стоп":
-            bot.send_message(user_id, dialog.perplexity(), reply_markup=get_default_menu())
-            return 
-
-        section_id = None
-        if message.text.isdecimal():
-            section_id = int(message.text)
-            sqDB = question_table.SectionQuestionDB()
-            if not sqDB.is_exist(section_id):
-                section_id = None
-        if section_id is None:
-            text = "Такого ID несуществует. Введи другой."
-            bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
-            ask_section_add_question(message, bot)
-        else:
-            bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
-            bot.register_next_step_handler(message, ask_answer_add_question, bot, section_id)
-
-    def ask_answer_add_question(message: telebot.types.Message, bot: telebot.TeleBot, title):
-        # user_id = message.from_user.id
-        # text = dialog.add_question(1)
-        # bot.send_message(user_id, text, parse_mode="Markdown", reply_markup=types.ReplyKeyboardRemove())
-        # bot.register_next_step_handler(message, ask_date_add_section, bot)
-        pass
-
-    ask_section_add_question(message, bot)
