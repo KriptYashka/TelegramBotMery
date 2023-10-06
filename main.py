@@ -8,7 +8,6 @@ from view.menu import get_default_menu
 from view.commands import mery_cmd
 from view.database.db_initial import db_init
 from brench_communicate.media import send_photo
-from voice.test_laptop import VoiceRecognize
 
 os.environ['MERY_TOKEN'] = '5052598391:AAEBBvip6Th7wgzYNxNHdDlErVdt64zStis'
 token = os.environ['MERY_TOKEN']
@@ -44,10 +43,10 @@ def listen_photo_message(message: telebot.types.Message):
     send_photo(message, bot)
 
 
-@bot.message_handler(content_types=["voice"])
-def listen_voice_message(message: telebot.types.Message):
-    vr = VoiceRecognize()
-    vr.recognize(bot, message)
+# @bot.message_handler(content_types=["voice"])
+# def listen_voice_message(message: telebot.types.Message):
+#     vr = VoiceRecognize()
+#     vr.recognize(bot, message)
 
 
 def main():
